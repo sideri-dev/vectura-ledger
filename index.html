@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Vectura Ledger</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#F8F8F5;--surface-1:#FFFFFF;--ink:#1D2126;--muted:#66707E;--line:#E1E3DE;--line-strong:#C9CCC5;
+  --accent:#2C4E96;--accent-soft:#EDF1F9;
+  --s-breaks:#2a78d6;--s-mixed:#eb6834;--s-supports:#1baf7a;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --sans:"Instrument Sans",-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#131619;--surface-1:#1C2126;--ink:#E6E8EB;--muted:#98A2B0;--line:#2A3038;--line-strong:#3A414B;
+  --accent:#82A4E8;--accent-soft:#232B3A;
+  --s-breaks:#3987e5;--s-mixed:#d95926;--s-supports:#199e70}}
+:root[data-theme="dark"]{
+  --ground:#131619;--surface-1:#1C2126;--ink:#E6E8EB;--muted:#98A2B0;--line:#2A3038;--line-strong:#3A414B;
+  --accent:#82A4E8;--accent-soft:#232B3A;
+  --s-breaks:#3987e5;--s-mixed:#d95926;--s-supports:#199e70}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:840px;margin:0 auto;padding:26px 18px 60px}
+header{border-bottom:2px solid var(--ink);padding-bottom:15px;margin-bottom:20px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:500}
+h1{font-size:26px;font-weight:700;letter-spacing:-.01em;margin:6px 0 9px}
+.lede{color:var(--muted);font-size:13.5px;margin:0;max-width:64ch}
+nav{margin-top:12px;font-size:12.5px}
+nav a{color:var(--accent);font-weight:600;text-decoration:none;border-bottom:1px solid var(--line-strong)}
+.kpi{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:20px 0 4px}
+@media(min-width:560px){.kpi{grid-template-columns:repeat(4,1fr)}}
+.tile{background:var(--surface-1);border:1px solid var(--line);border-radius:7px;padding:12px 13px}
+.tile .k{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.tile .v{font-size:23px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:3px;line-height:1.1}
+.tile .s{font-size:11.5px;color:var(--muted);margin-top:2px}
+h2{font-size:17px;font-weight:700;margin:34px 0 4px}
+.sub{font-size:13px;color:var(--muted);margin:0 0 16px;max-width:66ch}
+.chart{background:var(--surface-1);border:1px solid var(--line);border-radius:8px;padding:18px 16px 12px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px;font-size:12.5px}
+.legend span{display:inline-flex;align-items:center;gap:6px;font-weight:600}
+.sw{width:11px;height:11px;border-radius:50%;flex:0 0 auto;box-shadow:0 0 0 2px var(--surface-1)}
+.grp{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:14px 0 7px;padding-top:11px;border-top:1px dashed var(--line)}
+.grp:first-of-type{border-top:0;padding-top:0;margin-top:0}
+.r{display:grid;grid-template-columns:1fr;gap:2px;margin-bottom:11px;cursor:pointer;border-radius:5px;padding:3px 2px}
+.r:hover,.r:focus-visible{background:var(--accent-soft);outline:none}
+.rl{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:13px}
+.rl b{font-weight:600}
+.rl .mk{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.06em}
+.rl .ix{font-family:var(--mono);font-weight:600;font-variant-numeric:tabular-nums;font-size:13.5px}
+.track{position:relative;height:15px}
+.track::before{content:"";position:absolute;left:0;right:0;top:7px;height:1px;background:var(--line)}
+.par{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--line-strong);border-radius:1px}
+.dot{position:absolute;top:1px;width:13px;height:13px;border-radius:50%;margin-left:-6.5px;box-shadow:0 0 0 2px var(--surface-1)}
+.axis{position:relative;height:20px;margin-top:6px;border-top:1px solid var(--line)}
+.axis i{position:absolute;top:4px;transform:translateX(-50%);white-space:nowrap;font-family:var(--mono);font-size:10.5px;color:var(--muted);font-style:normal}
+.note{font-size:12px;color:var(--muted);margin-top:12px;line-height:1.6}
+table{width:100%;border-collapse:collapse;margin-top:6px;font-size:13px}
+th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:8px 9px;border-bottom:2px solid var(--line-strong);white-space:nowrap}
+th.n,td.n{text-align:right;font-variant-numeric:tabular-nums;font-family:var(--mono)}
+td{padding:9px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:var(--accent-soft)}
+tbody tr.on{background:var(--accent-soft)}
+.vid{font-family:var(--mono);font-weight:600;color:var(--accent);font-size:12px}
+.dr{display:inline-flex;align-items:center;gap:5px;font-weight:600;font-size:12px}
+.det td{background:var(--ground);font-size:12.5px;color:var(--muted);line-height:1.65}
+.det dl{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;margin:0 0 9px}
+.det dt{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;white-space:nowrap}
+.det dd{margin:0;color:var(--ink)}
+.det a{color:var(--accent)}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted);font-family:var(--mono);line-height:1.8}
+</style>
+</head>
+<body data-palette="#2a78d6,#eb6834,#1baf7a">
+<div class="wrap" id="app"></div>
+<script id="rows" type="application/json">[{"id": "V-001", "brand_ja": "ユニクロ", "brand_en": "UNIQLO", "category": "apparel [OUT-OF-CATEGORY control]", "japan_position": "mass", "target_market": "VN", "entry_year": "2019", "entry_mode": "JV", "sku_reference": "AIRism Crew Neck T-Shirt (code 482514; identical both markets)", "price_japan_jpy": "990", "price_target_local": "244000", "price_target_currency": "VND", "fx_rate_used": "1 JPY = 161.90568 VND (open.er-api.com)", "fx_rate_date": "2026-08-31", "price_index": "1.52", "local_comparison_set": "", "store_count_entry": "1", "store_count_latest": "32", "count_date": "2026-07-31", "status": "expanding", "mechanism_tag": "P1", "direction": "breaks", "evidence_url": "https://www.uniqlo.com/vn/en/men/airism", "evidence_language": "en", "evidence_date": "2026-08-31", "confidence": "high", "notes": "[POSITIONED-UP] mass-at-home control case. JV: Fast Retailing (Singapore) 75% / Mitsubishi Corporation 25%; first store HCMC 2019-12-06. JP price tax-inclusive (taxPolicy INCLUSIVE); VN assumed VAT-inclusive by display convention, not SKU-verified. Both price anchors re-fetch confirmed 2026-08-31; store count first-party (fastretailing.com, updated 2026-08-04).", "promoted_by": "Rahut 2026-08-31"}, {"id": "V-002", "brand_ja": "ロイズ", "brand_en": "Royce'", "category": "F&B", "japan_position": "premium", "target_market": "ID", "entry_year": "2011", "entry_mode": "distributor", "sku_reference": "Nama Chocolate Au Lait 20-piece/125g (identical SKU; Hokkaido-made; ~1-month shelf life)", "price_japan_jpy": "1215", "price_target_local": "384000", "price_target_currency": "IDR", "fx_rate_used": "1 JPY = 110.95 IDR (api.frankfurter.dev / ECB)", "fx_rate_date": "2026-08-28", "price_index": "2.85", "local_comparison_set": "", "store_count_entry": "1", "store_count_latest": "6", "count_date": "2022-02", "status": "stable", "mechanism_tag": "P1", "direction": "breaks", "evidence_url": "https://royce.co.id/collections/nama-chocolate", "evidence_language": "en", "evidence_date": "2026-08-31", "confidence": "high", "notes": "Index raised, not eroded: IDR 285,000 (Wayback 2023-03-22) → IDR 384,000, +35% in 3 years, no promo flags on any of 10 Nama variants. Sole national distributor PT Wilson Indotama since 2011-10 (first counter: The Foodhall, Plaza Indonesia); premium-grocer channel only. Store count [SINGLE-SOURCE] (brand's own page, stale at Feb 2022 — needs a refresh). Both price anchors re-fetch confirmed 2026-08-31.", "promoted_by": "Rahut 2026-08-31"}, {"id": "V-003", "brand_ja": "モーモーパラダイス", "brand_en": "Mo-Mo-Paradise", "category": "F&B", "japan_position": "upper-mass", "target_market": "TH", "entry_year": "2007", "entry_mode": "franchise", "sku_reference": "Menu-tier pair, not identical SKU: TH Standard AYCE 599++ THB vs Tokyo regular MO-MO-Course ¥4,500 (both net of tax/service); Gold 1,290++ vs Kabukicho F1 course ¥6,000 → index 1.04", "price_japan_jpy": "4500", "price_target_local": "599", "price_target_currency": "THB", "fx_rate_used": "1 JPY = 0.20638 THB (api.frankfurter.dev / ECB)", "fx_rate_date": "2026-08-28", "price_index": "0.64", "local_comparison_set": "Suki Teenoi 219 THB; MK counter-buffet 299 THB (Brand Buffet 2025-06-09); entry tier sits 2.0–2.7× the local mass anchors", "store_count_entry": "1", "store_count_latest": "31", "count_date": "2025-07-09", "status": "stable", "mechanism_tag": "P1", "direction": "breaks", "evidence_url": "https://marketeeronline.co/archives/424253", "evidence_language": "th", "evidence_date": "2025-07-09", "confidence": "high", "notes": "Master franchisee Noble Restaurant Co. 19 years; premium tiers (Gold, Nabezo Premium) created in-market. Premium menu flat 5 years (Wayback 2021-06-19: 1290++; Standard 690→729); on-record refusal to enter the suki price war (Marketeer 2025-07-09); expansion deliberately paused 2025, +8 branches across three sister brands. [CONFLICT] entry year: thaich.net (2018) says first Thai store 2007; official Gold page says CentralWorld branch opened 2011 — both carried. Protein composition differs by market (AU/US beef TH vs Japanese beef JP). Menus + both Tokyo PDFs re-fetch confirmed 2026-08-31.", "promoted_by": "Rahut 2026-08-31"}, {"id": "V-004", "brand_ja": "無印良品", "brand_en": "MUJI", "category": "lifestyle goods", "japan_position": "upper-mass", "target_market": "TH", "entry_year": "2006", "entry_mode": "franchise (Central Department Store) → 50/50 JV 'MUJI Retail (Thailand)' from 2013", "sku_reference": "Ultrasonic Aroma Diffuser MJ-UAD1", "price_japan_jpy": "6990", "price_target_local": "2490", "price_target_currency": "THB", "fx_rate_used": "1 THB = 4.837074 JPY (open.er-api.com)", "fx_rate_date": "2026-08-31", "price_index": "1.72", "local_comparison_set": "", "store_count_entry": "1", "store_count_latest": "40", "count_date": "2025-11-28", "status": "expanding", "mechanism_tag": "P1", "direction": "mixed", "evidence_url": "https://www.central.co.th/en/muji-aroma-diffuser-mjt50141005", "evidence_language": "en/th", "evidence_date": "2026-08-31", "confidence": "medium", "notes": "[UNREVERIFIED x3] TH anchor captured once verbatim (\"originalPrice\":2490) then Cloudflare-walled on three re-checks (hardened to a 403 edge block as of 2026-09-02); JP confirmed raw. Index 0.86 at the active 50% storefront promo. MIXED because the premium is being dismantled by choice: six consecutive years of price cuts (264/769/217/126 items, 2019-2024), 50% of SKUs under 300 THB, stated target of Japan parity — while opening SEA's largest MUJI flagship (3,700 sqm, CentralWorld, 2025-11-28). Reseller layer sits ~16% ABOVE official list (Shopee 2,890 THB, [GREY], no official MUJI store on TH marketplaces).", "promoted_by": "Rahut 2026-09-02"}, {"id": "V-005", "brand_ja": "ユニクロ", "brand_en": "UNIQLO", "category": "apparel [OUT-OF-CATEGORY control]", "japan_position": "mass", "target_market": "TH", "entry_year": "2011", "entry_mode": "JV subsidiary — Fast Retailing 75% / Mitsubishi Corporation 25%", "sku_reference": "SUPIMA Cotton Crew Neck T-Shirt, code E455365-000 (identical both markets)", "price_japan_jpy": "1990", "price_target_local": "490", "price_target_currency": "THB", "fx_rate_used": "1 THB = 4.837074 JPY (open.er-api.com)", "fx_rate_date": "2026-08-31", "price_index": "1.19", "local_comparison_set": "", "store_count_entry": "1", "store_count_latest": "65", "count_date": "2023-09-28", "status": "expanding", "mechanism_tag": "P1", "direction": "breaks", "evidence_url": "https://www.fastretailing.com/eng/ir/news/1104071840.html", "evidence_language": "en", "evidence_date": "2011-04-07", "confidence": "high", "notes": "[POSITIONED-UP] Mass at home, elevated and held abroad. Identical SKU at 1.19x Japan, full price, no promo flag, fifteen years in. JV and first-store facts first-party; TH price CONFIRMED raw 2026-09-02 via the commerce v3 API (`\"prices\":{\"promo\":null,\"base\":{...\"value\":\"490.0000\"}}`, productId E455365-000) — the earlier JS-shell caveat is cleared; both sides are plain confirmed raw fetches. A ~72-store figure for 2026-02 exists as [LEAD], unverified.", "promoted_by": "Rahut 2026-09-02"}, {"id": "V-006", "brand_ja": "大戸屋", "brand_en": "Ootoya", "category": "F&B", "japan_position": "mass", "target_market": "TH", "entry_year": "2005", "entry_mode": "JV (Betagro Ootoya Thailand) → full stake sold 2011-08-31 to Central Restaurants Group; franchise since", "sku_reference": "format-mismatched: JP 四元豚のロースかつ定食 (teishoku set) vs TH Katsudon (donburi)", "price_japan_jpy": "970", "price_target_local": "269", "price_target_currency": "THB", "fx_rate_used": "1 THB = 4.837074 JPY (open.er-api.com)", "fx_rate_date": "2026-08-31", "price_index": "1.34", "local_comparison_set": "", "store_count_entry": "32", "store_count_latest": "40", "count_date": "2023-05-20", "status": "expanding", "mechanism_tag": "P1", "direction": "mixed", "evidence_url": "https://www.nikkei.com/article/DGXNASDD260CZ_W1A720C1TJ1000/", "evidence_language": "ja", "evidence_date": "2011-07-26", "confidence": "medium", "notes": "Index 1.34 is a FLOOR: the JP anchor is a fuller format (set) than the TH one (bowl), so a like-for-like pair reads higher. Ootoya prices vary by store in Japan (company states so), so no single national JP price exists; anchor is one dated branch. MIXED because the operator is re-anchoring UPWARD: CRG launched OOTOYA TOKUSEN at CentralWorld (sets 499-759 THB, 10-branch target) and premium shabu brand Ootoya Oki from 2025-09-26 — a mass-at-home brand being constructed premium in-market. store_count_entry is the 2011 JV-exit count, not the 2005 entry count.", "promoted_by": "Rahut 2026-09-02"}, {"id": "V-007", "brand_ja": "スノーピーク", "brand_en": "Snow Peak", "category": "tools & homeware", "japan_position": "premium", "target_market": "TH", "entry_year": "", "entry_mode": "authorized reseller / co-branded storefront — CAMP STUDIO ('Snow Peak Thailand by CAMP STUDIO'); contractual status inferred from branding, not confirmed by Snow Peak corporate", "sku_reference": "Thermo Tumbler 470 (サーモタンブラー470)", "price_japan_jpy": "5544", "price_target_local": "1490", "price_target_currency": "THB", "fx_rate_used": "1 THB = 4.837074 JPY (open.er-api.com)", "fx_rate_date": "2026-08-31", "price_index": "1.30", "local_comparison_set": "", "store_count_entry": "", "store_count_latest": "2 Bangkok locations + Siam Takashimaya shop-in-shop", "count_date": "2026-08-31", "status": "stable", "mechanism_tag": "P1", "direction": "supports", "evidence_url": "https://www.campstudio.co.th/product-page/sde-080", "evidence_language": "th/en", "evidence_date": "2026-08-31", "confidence": "medium", "notes": "Re-anchored 2026-08-31: JP 5,544 JPY confirmed at the moved URL (ec.snowpeak.co.jp restructured to opaque SNP-codes; item SNP0121A0581). TH page currently signals pre-order (restock 15/9/2026). Entry year not pinned; reseller-mode is the load-bearing P3 fact and is solid. No Snow Peak-operated store in TH — dealer layer the brand does not control.", "promoted_by": "Rahut 2026-09-02"}, {"id": "V-008", "brand_ja": "丸亀製麺", "brand_en": "Marugame Udon", "category": "F&B", "japan_position": "mass", "target_market": "ID", "entry_year": "2013", "entry_mode": "JV — P.T. SRIBOGA MARUGAME INDONESIA (Toridoll x Sriboga Group, a major local flour miller)", "sku_reference": "Kake Udon かけうどん（並）", "price_japan_jpy": "440", "price_target_local": "45000", "price_target_currency": "IDR", "fx_rate_used": "1 JPY = 110.530326 IDR (open.er-api.com)", "fx_rate_date": "2026-08-31", "price_index": "0.93", "local_comparison_set": "", "store_count_entry": "1", "store_count_latest": "100", "count_date": "2023-10-14", "status": "expanding", "mechanism_tag": "P1", "direction": "breaks", "evidence_url": "https://www.foodrink.co.jp/news/2023/10/1874416.html", "evidence_language": "ja", "evidence_date": "2023-10-18", "confidence": "medium", "notes": "[GREY] ID price from a third-party menu aggregator — the official ordering site exposes no static price. [SINGLE-SOURCE] JP price from a dated secondary source quoting the official 2026-01-14 revision (420->440 JPY). Tax basis unconfirmed on the ID side: if menu prices there exclude VAT/service, the true index is nearer or above 1.0. Near-parity pricing with 100 stores in a decade on a deep local-partner JV. A ~127-store figure is paywalled, [LEAD] only.", "promoted_by": "Rahut 2026-09-02"}, {"id": "V-009", "brand_ja": "象印", "brand_en": "Zojirushi", "category": "tools & homeware", "japan_position": "premium", "target_market": "VN", "entry_year": "", "entry_mode": "parallel import (grey) — Hiep Hong Japan; distinct from the official distributor channel", "sku_reference": "NW-VC18 極め炊き, IH rice cooker 1.8L/10合 — same Japan-domestic model both sides", "price_japan_jpy": "24500", "price_target_local": "5000000", "price_target_currency": "VND", "fx_rate_used": "1 JPY = 162.818075 VND (open.er-api.com)", "fx_rate_date": "2026-09-01", "price_index": "1.25", "local_comparison_set": "Official VN channel's nearest 1.8L unit: NL-AAQ18-CA at 5,690,000 VND list (34,947 JPY) — a MICOM model, one tier below this IH unit", "store_count_entry": "", "store_count_latest": "", "count_date": "", "status": "unknown", "mechanism_tag": "P1", "direction": "supports", "evidence_url": "https://hiephongjapan.vn/noi-com-zojirushi", "evidence_language": "vi", "evidence_date": "2026-09-02", "confidence": "medium-high", "notes": "[RAHUT-FETCHED: browser, 2026-09-02] [GREY — and the grey channel IS the evidence here] [MARKETPLACE-JP]. First matched-model pair in the corpus; it exists only because parallel import carries the actual Japanese unit — all 7 official VN codes return zero on zojirushi.co.jp. VN listing states 'Hang noi dia Nhat Ban' (Japan-domestic goods); dealer reference price 7,050,000 VND = index 1.77. JP 24,500 JPY is a street price (kakaku.com lowest of 2 shops, corroborating Rahut's amazon.co.jp figure); NW-VC18 is a 2021 model with no current official JP list. THE FINDING: the official channel charges ~14% MORE (34,947 JPY) for a lower-tier micom unit than the grey channel charges for this IH one — a price architecture that cannot survive side-by-side comparison, which is why the export codes exist nowhere in Japan. Voltage caveat: 100V unit in a 220V market, transformer cost not in either figure.", "promoted_by": "Rahut 2026-09-02"}]</script>
+<script id="meta" type="application/json">{"generated": "2026-09-02"}</script>
+<script>
+(function(){
+"use strict";
+var R=JSON.parse(document.getElementById("rows").textContent);
+var M=JSON.parse(document.getElementById("meta").textContent);
+var DIR=[["breaks","Breaks the claim","s-breaks"],["mixed","Cuts both ways","s-mixed"],["supports","Supports the claim","s-supports"]];
+var MAXX=3.0;
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function pct(v){return Math.max(0,Math.min(100,(v/MAXX)*100));}
+function num(v){var n=parseFloat(v);return isFinite(n)?n:null;}
+
+function chart(){
+  var h='<div class="chart"><div class="legend">';
+  DIR.forEach(function(d){h+='<span><i class="sw" style="background:var(--'+d[2]+')"></i>'+esc(d[1])+'</span>';});
+  h+='<span><i class="sw" style="background:var(--line-strong);border-radius:1px;width:3px;height:12px;box-shadow:none"></i>Parity with Japan</span></div>';
+  DIR.forEach(function(d){
+    var set=R.filter(function(r){return r.direction===d[0];});
+    if(!set.length) return;
+    h+='<div class="grp">'+esc(d[1])+' — '+set.length+'</div>';
+    set.sort(function(a,b){return num(a.price_index)-num(b.price_index);}).forEach(function(r){
+      var v=num(r.price_index); if(v===null) return;
+      h+='<div class="r" tabindex="0" data-go="'+esc(r.id)+'" title="'+esc(r.brand_en+" → "+r.target_market+" · index "+r.price_index)+'">'
+       +'<div class="rl"><span><b>'+esc(r.brand_en)+'</b> <span class="mk">'+esc(r.target_market)+'</span></span>'
+       +'<span class="ix">'+esc(r.price_index)+'</span></div>'
+       +'<div class="track"><i class="par" style="left:'+pct(1).toFixed(2)+'%"></i>'
+       +'<i class="dot" style="left:'+pct(v).toFixed(2)+'%;background:var(--'+d[2]+')"></i></div></div>';
+    });
+  });
+  h+='<div class="axis">';
+  // Four ticks, not seven: at phone width seven collide, and "1.0 parity"
+  // needs the room. The legend already names the parity rule.
+  [0,1,2,3].forEach(function(t){
+    var st=t===0?'left:0;transform:none':(t===3?'right:0;left:auto;transform:none':'left:'+pct(t).toFixed(2)+'%');
+    h+='<i style="'+st+'">'+(t===1?"1.0 parity":t.toFixed(1))+'</i>';});
+  h+='</div><p class="note"><b>Read it this way:</b> if divergence from the Japanese price explained the outcome, the three groups would separate along this axis. They do not. Cases that held their position run from 0.64 to 2.85 — the full width of the chart — while both cases that eroded sit in the middle of that range.</p></div>';
+  return h;
+}
+
+function table(){
+  var h='<div class="scroll"><table><thead><tr><th>Row</th><th>Brand</th><th>Market</th><th class="n">Japan</th><th class="n">Local</th><th class="n">Index</th><th>Outcome</th><th>Entry</th></tr></thead><tbody>';
+  R.forEach(function(r){
+    var d=DIR.filter(function(x){return x[0]===r.direction;})[0]||DIR[0];
+    h+='<tr data-row="'+esc(r.id)+'" id="row-'+esc(r.id)+'"><td class="vid">'+esc(r.id)+'</td>'
+     +'<td><b>'+esc(r.brand_en)+'</b><br><span style="color:var(--muted);font-size:11.5px">'+esc(r.brand_ja)+'</span></td>'
+     +'<td>'+esc(r.target_market)+'</td>'
+     +'<td class="n">¥'+esc(Number(r.price_japan_jpy).toLocaleString())+'</td>'
+     +'<td class="n">'+esc(Number(r.price_target_local).toLocaleString())+' '+esc(r.price_target_currency)+'</td>'
+     +'<td class="n"><b>'+esc(r.price_index)+'</b></td>'
+     +'<td><span class="dr"><i class="sw" style="background:var(--'+d[2]+')"></i>'+esc(r.direction)+'</span></td>'
+     +'<td style="font-size:12px">'+esc((r.entry_year||"—"))+'</td></tr>'
+     +'<tr class="det" hidden data-det="'+esc(r.id)+'"><td colspan="8"><dl>'
+     +'<dt>What was compared</dt><dd>'+esc(r.sku_reference)+'</dd>'
+     +'<dt>Entry mode</dt><dd>'+esc(r.entry_mode||"unknown")+'</dd>'
+     +(r.local_comparison_set?'<dt>At that price locally</dt><dd>'+esc(r.local_comparison_set)+'</dd>':'')
+     +(r.store_count_latest?'<dt>Stores</dt><dd>'+esc((r.store_count_entry||"?")+" → "+r.store_count_latest)+(r.count_date?' <span style="color:var(--muted)">('+esc(r.count_date)+')</span>':'')+'</dd>':'')
+     +'<dt>Rate used</dt><dd>'+esc(r.fx_rate_used)+' <span style="color:var(--muted)">('+esc(r.fx_rate_date)+')</span></dd>'
+     +'<dt>Confidence</dt><dd>'+esc(r.confidence)+'</dd>'
+     +'</dl>'+esc(r.notes)
+     +(r.evidence_url?'<div style="margin-top:9px"><a href="'+esc(r.evidence_url)+'" target="_blank" rel="noopener">Source →</a> <span style="color:var(--muted)">'+esc(r.evidence_date)+'</span></div>':'')
+     +'</td></tr>';
+  });
+  return h+'</tbody></table></div>';
+}
+
+function render(){
+  var idx=R.map(function(r){return num(r.price_index);}).filter(function(v){return v!==null;});
+  var mk={};R.forEach(function(r){mk[r.target_market]=1;});
+  var held=R.filter(function(r){return r.direction!=="supports";}).length;
+  var h='<header><span class="eyebrow">Vectura · the ledger</span><h1>Every case, and what it costs</h1>'
+   +'<p class="lede">One row per brand entering one market, with the same product priced on both sides of the border. '
+   +'The index is the destination price divided by the Japanese price, converted at a recorded rate. '
+   +'This is the whole evidence base — nothing is in the argument that is not a row here.</p>'
+   +'<nav><a href="https://vectura-wanted.sideri.io/">← What is waiting for you</a></nav></header>'
+   +'<div class="kpi">'
+   +'<div class="tile"><div class="k">Cases</div><div class="v">'+R.length+'</div><div class="s">'+Object.keys(mk).length+' markets</div></div>'
+   +'<div class="tile"><div class="k">Index range</div><div class="v">'+Math.min.apply(null,idx).toFixed(2)+'–'+Math.max.apply(null,idx).toFixed(2)+'</div><div class="s">vs Japan</div></div>'
+   +'<div class="tile"><div class="k">Held position</div><div class="v">'+held+'</div><div class="s">of '+R.length+' cases</div></div>'
+   +'<div class="tile"><div class="k">Median</div><div class="v">'+idx.sort(function(a,b){return a-b;})[Math.floor(idx.length/2)].toFixed(2)+'</div><div class="s">price index</div></div>'
+   +'</div>'
+   +'<h2>Does the price gap explain the outcome?</h2>'
+   +'<p class="sub">Each case at its price index, grouped by whether it supports or breaks the claim that pricing from Japan is what loses the position.</p>'
+   +chart()
+   +'<h2>The rows</h2><p class="sub">Tap any row for the comparison, the entry mode, the rate used and what the evidence does and does not support.</p>'
+   +table()
+   +'<footer>Built from the project as of '+esc(M.generated||"")+'. Public retail prices and the reasoning applied to them.<br>Every figure carries a dated source; caveats are recorded in the row, not omitted from it.</footer>';
+  document.getElementById("app").innerHTML=h;
+
+  function toggle(id){
+    var d=document.querySelector('[data-det="'+id+'"]');
+    var t=document.querySelector('[data-row="'+id+'"]');
+    if(!d)return; d.hidden=!d.hidden; t.classList.toggle("on",!d.hidden);
+  }
+  Array.prototype.forEach.call(document.querySelectorAll("[data-row]"),function(t){
+    t.onclick=function(){toggle(t.getAttribute("data-row"));};});
+  Array.prototype.forEach.call(document.querySelectorAll("[data-go]"),function(el){
+    function go(){var id=el.getAttribute("data-go");var d=document.querySelector('[data-det="'+id+'"]');
+      if(d&&d.hidden) toggle(id);
+      document.getElementById("row-"+id).scrollIntoView({block:"center",behavior:"smooth"});}
+    el.onclick=go;
+    el.onkeydown=function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();go();}};});
+}
+render();
+})();
+</script>
+</body>
+</html>
