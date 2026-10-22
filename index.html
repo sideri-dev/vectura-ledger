@@ -90,6 +90,9 @@ var MAXX=3.0;
 function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
 function pct(v){return Math.max(0,Math.min(100,(v/MAXX)*100));}
 function num(v){var n=parseFloat(v);return isFinite(n)?n:null;}
+// Rows from 2026-10-02 on carry two or three URLs in evidence_url ("… (JP) paired
+// with … (SG)"); one href around the whole cell was a dead link. One link per URL.
+function links(s){var out=[],re=/https?:\/\/[^\s)]+/g,m;while((m=re.exec(String(s||"")))){out.push('<a href="'+esc(m[0])+'" target="_blank" rel="noopener">'+(out.length?'Source '+(out.length+1):'Source')+' →</a>');}return out.join(' ');}
 
 function chart(){
   var h='<div class="chart"><div class="legend">';
@@ -114,12 +117,19 @@ function chart(){
   [0,1,2,3].forEach(function(t){
     var st=t===0?'left:0;transform:none':(t===3?'right:0;left:auto;transform:none':'left:'+pct(t).toFixed(2)+'%');
     h+='<i style="'+st+'">'+(t===1?"1.0 parity":t.toFixed(1))+'</i>';});
-  h+='</div><p class="note"><b>Read it this way:</b> if divergence from the Japanese price explained the outcome, the three groups would separate along this axis. They do not. Cases that held their position run from 0.64 to 2.85 — the full width of the chart — while both cases that eroded sit in the middle of that range.</p></div>';
+  // Figures computed from the rows, never typed: the ledger is amended by hand
+  // and a typed number here went stale silently (it read "0.64 to 2.85" and
+  // "both cases that eroded" from the nine-row ledger of 2026-09-02).
+  var nh=R.filter(function(r){return r.direction!=="supports"&&num(r.price_index)!==null;}).map(function(r){return num(r.price_index);});
+  var sp=R.filter(function(r){return r.direction==="supports"&&num(r.price_index)!==null;}).map(function(r){return num(r.price_index);});
+  function rng(a){return a.length?Math.min.apply(null,a).toFixed(2)+' to '+Math.max.apply(null,a).toFixed(2):'—';}
+  var inside=sp.length&&nh.length&&Math.min.apply(null,sp)>=Math.min.apply(null,nh)&&Math.max.apply(null,sp)<=Math.max.apply(null,nh);
+  h+='</div><p class="note"><b>Read it this way:</b> if divergence from the Japanese price explained the outcome, the three groups would separate along this axis. They do not. Cases that break the claim or cut both ways run from '+rng(nh)+' — the full width of the chart — while the '+sp.length+' cases that support it sit between '+rng(sp)+(inside?', inside that range.':', overlapping it.')+'</p></div>';
   return h;
 }
 
 function table(){
-  var h='<div class="scroll"><table><thead><tr><th>Row</th><th>Brand</th><th>Market</th><th class="n">Japan</th><th class="n">Local</th><th class="n">Index</th><th>Outcome</th><th>Entry</th></tr></thead><tbody>';
+  var h='<div class="scroll"><table><thead><tr><th>Row</th><th>Brand</th><th>Market</th><th class="n">Japan</th><th class="n">Local</th><th class="n">Index</th><th>Direction</th><th>Entry</th></tr></thead><tbody>';
   R.forEach(function(r){
     var d=DIR.filter(function(x){return x[0]===r.direction;})[0]||DIR[0];
     h+='<tr data-row="'+esc(r.id)+'" id="row-'+esc(r.id)+'"><td class="vid">'+esc(r.id)+'</td>'
@@ -138,7 +148,7 @@ function table(){
      +'<dt>Rate used</dt><dd>'+esc(r.fx_rate_used)+' <span style="color:var(--muted)">('+esc(r.fx_rate_date)+')</span></dd>'
      +'<dt>Confidence</dt><dd>'+esc(r.confidence)+'</dd>'
      +'</dl>'+esc(r.notes)
-     +(r.evidence_url?'<div style="margin-top:9px"><a href="'+esc(r.evidence_url)+'" target="_blank" rel="noopener">Source →</a> <span style="color:var(--muted)">'+esc(r.evidence_date)+'</span></div>':'')
+     +(r.evidence_url?'<div style="margin-top:9px">'+links(r.evidence_url)+' <span style="color:var(--muted)">'+esc(r.evidence_date)+'</span></div>':'')
      +'</td></tr>';
   });
   return h+'</tbody></table></div>';
@@ -147,7 +157,9 @@ function table(){
 function render(){
   var idx=R.map(function(r){return num(r.price_index);}).filter(function(v){return v!==null;});
   var mk={};R.forEach(function(r){mk[r.target_market]=1;});
-  var held=R.filter(function(r){return r.direction!=="supports";}).length;
+  // Held = the row's own status column (expanding or stable), not its direction
+  // against the claim: a mixed row can be contracting (V-021, V-025).
+  var held=R.filter(function(r){return /^(expanding|stable)\b/i.test(String(r.status||""));}).length;
   var h='<header><span class="eyebrow">Vectura · the ledger</span><h1>Every case, and what it costs</h1>'
    +'<p class="lede">One row per brand entering one market, with the same product priced on both sides of the border. '
    +'The index is the destination price divided by the Japanese price, converted at a recorded rate. '
